@@ -1,4 +1,4 @@
-# Steps and Instruction
+# Steps and Instructions
 
 ## Running Docker Containers on EC2
 
