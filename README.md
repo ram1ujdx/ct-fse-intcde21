@@ -28,3 +28,62 @@ sudo usermod -a -G docker ec2-user
 5. docker  -v
 
 ```
+
+
+## Running Spring Boot Apps with Mysql On Docker
+
+### Running Mysql On Docker
+
+```bash
+
+docker run -d -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=docker -e MYSQL_USER=docker -e MYSQL_PASSWORD=password -p 3306:3306 --name mysql mysql
+
+```
+
+### Running app with Mysql (Through Host Network)
+
+```bash
+docker run -d -p 5000:5000 -e RDS_HOSTNAME=3.17.157.238 -e RDS_DB_NAME=docker -e RDS_PORT=3306 -e RDS_PASSWORD=password --name rest-api-db-app rest-api-db-app 
+```
+
+### Running app with Mysql (Link Based Communication)
+
+```bash
+docker run -d -p 5000:5000 -e RDS_HOSTNAME=mysql --link mysql -e RDS_DB_NAME=docker -e RDS_PORT=3306 -e RDS_PASSWORD=password --name rest-api-db-app rest-api-db-app 
+```
+
+### Running app with Mysql (Network Based Communication)
+
+* Create a network
+
+```bash
+docker network create app-network
+```
+
+* Run Mysql on app-network :
+
+```bash
+docker run -d --network=app-network -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=docker -e MYSQL_USER=docker -e MYSQL_PASSWORD=password -p 3306:3306 --name mysql mysql
+```
+
+* Run Java on app-network :
+
+```bash
+docker run -d -p 5000:5000 --network=app-network -e RDS_HOSTNAME=mysql -e RDS_DB_NAME=docker -e RDS_PORT=3306 -e RDS_PASSWORD=password --name rest-api-db-app rest-api-db-app 
+```
+
+
+
+### Persisting Mysql Data:
+
+* Create a docker volume
+
+```bash
+docker volume create app-data
+```
+* Running Mysql Container with the volume
+
+```bash
+docker run -d --network=app-network -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=docker -e MYSQL_USER=docker -e MYSQL_PASSWORD=password -p 3306:3306 --volume add-data:/var/lib/mysql --name mysql mysql
+```
+
