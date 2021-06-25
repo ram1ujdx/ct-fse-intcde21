@@ -1,0 +1,35 @@
+docker run -d -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=docker -e MYSQL_USER=docker -e MYSQL_PASSWORD=password -p 3306:3306 --name mysql mysql
+
+
+Running app with Mysql (Through Host Network)
+
+docker run -d -p 5000:5000 -e RDS_HOSTNAME=3.17.157.238 -e RDS_DB_NAME=docker -e RDS_PORT=3306 -e RDS_PASSWORD=password --name rest-api-db-app rest-api-db-app 
+
+Running app with Mysql (Link Based Communication)
+
+docker run -d -p 5000:5000 -e RDS_HOSTNAME=mysql --link mysql -e RDS_DB_NAME=docker -e RDS_PORT=3306 -e RDS_PASSWORD=password --name rest-api-db-app rest-api-db-app 
+
+Running app with Mysql (Network Based Communication)
+
+Create a network
+
+docker network create app-network
+
+Run Mysql on app-network :
+
+docker run -d --network=app-network -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=docker -e MYSQL_USER=docker -e MYSQL_PASSWORD=password -p 3306:3306 --name mysql mysql
+
+Run Java on app-network :
+
+docker run -d -p 5000:5000 --network=app-network -e RDS_HOSTNAME=mysql -e RDS_DB_NAME=docker -e RDS_PORT=3306 -e RDS_PASSWORD=password --name rest-api-db-app rest-api-db-app 
+
+
+Persisting Mysql Data:
+
+Create a docker volume
+
+docker volume create app-data
+
+
+docker run -d --network=app-network -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=docker -e MYSQL_USER=docker -e MYSQL_PASSWORD=password -p 3306:3306 --volume add-data:/var/lib/mysql --name mysql mysql
+
