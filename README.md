@@ -87,3 +87,17 @@ docker volume create app-data
 docker run -d --network=app-network -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=docker -e MYSQL_USER=docker -e MYSQL_PASSWORD=password -p 3306:3306 --volume add-data:/var/lib/mysql --name mysql mysql
 ```
 
+
+## Installing Docker-compose
+
+```bash
+
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+```
