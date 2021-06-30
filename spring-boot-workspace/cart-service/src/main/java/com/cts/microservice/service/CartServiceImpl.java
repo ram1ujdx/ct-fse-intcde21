@@ -12,11 +12,21 @@ import org.springframework.web.client.RestTemplate;
 import com.cts.microservice.model.CartDetails;
 import com.cts.microservice.model.Coupon;
 import com.cts.microservice.model.Product;
+import com.cts.microservice.proxy.CouponServiceProxy;
+import com.cts.microservice.proxy.ProductServiceProxy;
 @Service
 public class CartServiceImpl implements CartService {
 	
 	@Autowired
 	RestTemplate restTemplate;
+	
+	
+	@Autowired
+	CouponServiceProxy couponService;
+	
+	@Autowired
+	ProductServiceProxy productService;
+	
 	
 	@Value("${PRODUCT_SERVICE_URI}")
 	private String productServiceUri;
@@ -27,8 +37,14 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public CartDetails getCartDetails(String productCode, String couponCode) {
-		Product product= getProductDetails(productCode);
-		Coupon coupon=getCouponDetails(couponCode);
+//		Product product= getProductDetails(productCode);
+//		Coupon coupon=getCouponDetails(couponCode);
+		
+		Product product=productService.getProduct(productCode);
+		Coupon coupon=couponService.getCoupon(couponCode);
+		
+		
+		
 		
 		CartDetails cartDetails=new CartDetails();
 		cartDetails.setProduct(product);
