@@ -7,15 +7,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.cts.microservice.filter.AuthFilter;
 @Configuration
 public class AuthConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	UserDetailsService userDetailsService;
 
+	
+	@Autowired
+	AuthFilter filter;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
@@ -47,7 +55,15 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/user**").hasAnyRole("ADMIN","USER")
 			.antMatchers("**").permitAll()
 			.anyRequest()
-			.authenticated();
+			.authenticated()
+			.and()
+			.exceptionHandling()
+			.and()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
+		
+		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	
