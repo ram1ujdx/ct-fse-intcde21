@@ -28,19 +28,19 @@ public class CartServiceImpl implements CartService {
 	ProductServiceProxy productService;
 	
 	
-	@Value("${PRODUCT_SERVICE_URI}")
-	private String productServiceUri;
-	
-	@Value("${COUPON_SERVICE_URI}")
-	private String couponServiceUri;
+//	@Value("${PRODUCT_SERVICE_URI}")
+//	private String productServiceUri;
+//	
+//	@Value("${COUPON_SERVICE_URI}")
+//	private String couponServiceUri;
 	
 
 	@Override
 	public CartDetails getCartDetails(String productCode, String couponCode) {
 //		Product product= getProductDetails(productCode);
 //		Coupon coupon=getCouponDetails(couponCode);
-		
-		Product product=productService.getProduct(productCode);
+		Product product=new Product(productCode, "Dummy Product", 100000);
+		//Product product=productService.getProduct(productCode);
 		Coupon coupon=couponService.getCoupon(couponCode);
 		
 		
@@ -72,15 +72,15 @@ public class CartServiceImpl implements CartService {
 	}
 	
 	
-	private Product getProductDetails(String productCode) {
-		Product product=restTemplate.getForObject(productServiceUri+productCode, Product.class);
-		return product;
-	}
-	
-	private Coupon getCouponDetails(String couponCode) {
-		Coupon coupon=restTemplate.getForObject(couponServiceUri+couponCode, Coupon.class);
-		return coupon;
-	}
+//	private Product getProductDetails(String productCode) {
+//		Product product=restTemplate.getForObject(productServiceUri+productCode, Product.class);
+//		return product;
+//	}
+//	
+//	private Coupon getCouponDetails(String couponCode) {
+//		Coupon coupon=restTemplate.getForObject(couponServiceUri+couponCode, Coupon.class);
+//		return coupon;
+//	}
 	
 	
 

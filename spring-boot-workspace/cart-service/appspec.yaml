@@ -1,0 +1,12 @@
+
+version: 1.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:us-east-2:876983010549:task-definition/intcde021-cart-service:1"
+        LoadBalancerInfo:
+          ContainerName: "cart-service"
+          ContainerPort: "5000"
+        PlatformVersion: "LATEST"
+

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.cts.microservice.model.Coupon;
 import com.cts.microservice.model.Product;
 
-@FeignClient(value = "coupon-service", name = "coupon-service")
+@FeignClient(value = "coupon-service", url = "${COUPON_SERVICE_URL}")
 public interface CouponServiceProxy {
 
 	@GetMapping("/coupons/coupon-code/{couponCode}")
